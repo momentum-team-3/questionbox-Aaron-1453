@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from users.models import User
-from questionbox.models import Question
+from .models import Question, Answer
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 # index.html currently displays latest_question_list   
@@ -12,8 +13,23 @@ def index(request):
     return render(request, 'questionbox/index.html', context)
 
 def detail(request, question_id):
-    return HttpResponse("You're looking at detail for %s" % question_id)
+    question = get_object_or_404(Question, pk=question_id)
+    answer = get_object_or_404(Question, pk=question_id)
+    return render(request, 'questionbox/detail.html',{ 'question':question })
 
+def star(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        starred_answer = question.answer_set.get(pk=request.POST['answer'])
+    except (KeyError, Answer.DoesNotExist):
+        return render(request, 'questionbox/detail.html', {
+            'question': question,
+            'error_message': "If you're not gonna star something why'd you click this?",
+        })
+    else:
+        starred_answer.star += 1
+        starred_answer.save()
+    return HttpResponseRedirect(reverse('questionbox:star', args=(question_id, )))
 
 
 

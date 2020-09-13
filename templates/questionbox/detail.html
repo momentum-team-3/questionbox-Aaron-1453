@@ -1,1 +1,18 @@
-{{ question }}
+<h1>{{ question.question_text }}</h1>
+
+{% if error_message %}<p><strong> {{ error_message }}</strong></p>{% endif %}
+
+
+  {% csrf_token %}
+  {% for answer in question.answer_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+    <label for="choice{{ forloop.counter }}">{{ answer.answer_text }}</label><br>
+  {% endfor %}
+  <input type="submit" value="Add a star to your favorite answer!">
+</form>
+
+<h3>Here's the score:</h3>
+  {% for answer in question.answer_set.all %}
+  <li>{{ answer.answer_text }}: This is a  {{ answer.star }} star answer!</li>
+  {% endfor %}
+</ul>
