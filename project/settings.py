@@ -37,17 +37,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'questionbox.apps.QuestionboxConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     # Third-party
     'debug_toolbar',
     'django_extensions',
-
+    'markdownify',
     # Project-specific
     'users',
 ]
@@ -140,6 +142,6 @@ INTERNAL_IPS = [
 ]
 
 # Configure Django App for Heroku.
-import django_heroku
-django_heroku.settings(locals())
-del DATABASES['default']['OPTIONS']['sslmode']
+# import django_heroku
+# django_heroku.settings(locals())
+# del DATABASES['default']['OPTIONS']['sslmode']
